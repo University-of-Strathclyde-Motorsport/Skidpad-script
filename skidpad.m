@@ -1,7 +1,7 @@
 %skidpad track width simulation
 %assume the car is turning right
 %basic convergence, assume a velocity of 10 m/s and iterate%
-iter = 10; % number of iteration for velocity covnergence
+iter = 100; % number of iteration for velocity covnergence
 v = zeros(1,iter); %velocity vector
 v(1) = 10; %first guess of 10 m/s
 
@@ -15,8 +15,8 @@ s = 1.1;
 %cdh = range of cg heights (added in later)
 twf = 1:0.01:1.5;
 twr = 1:0.01:1.5;
-r = zeros(length(twf),length(twr));
-V = zeros(length(twf),length(twr));
+r = zeros(length(twf),length(twr)); %corner radius array
+V = zeros(length(twf),length(twr)); %final velocity array
 
 
 
@@ -45,22 +45,22 @@ V = zeros(length(twf),length(twr));
    Fz_fstatic = (m*g*weightdist)/2; %static normal loads
    Fz_rstatic = (m*g*(1-weightdist))/2;
 
-   df(i) = 0.5*rho*s*cl*v(i)^2; %calculate down force
+   df = 0.5*rho*s*cl*v(i)^2; %calculate down force
 
    Fz_fl = Fz_fstatic + load_transfer_front + df(i)/4; %loads (ask for aero balance)
    Fz_fr = Fz_fstatic - load_transfer_front + df(i)/4;
    Fz_rl = Fz_rstatic + load_transfer_rear + df(i)/4;
    Fz_rr = Fz_rstatic - load_transfer_rear + df(i)/4;
 
-   Fy_fl(i) = (1.95 +0.0001*(675 - Fz_fl))*Fz_fl;
-   Fy_fr(i) = (1.95 +0.0001*(675 - Fz_fr))*Fz_fr;
-   Fy_rl(i) = (1.95 +0.0001*(675 - Fz_rl))*Fz_rl;
-   Fy_rr(i) = (1.95 +0.0001*(675 - Fz_rr))*Fz_rr;
+   Fy_fl = (1.95 +0.0001*(675 - Fz_fl))*Fz_fl; %calculting tyre forces
+   Fy_fr = (1.95 +0.0001*(675 - Fz_fr))*Fz_fr;
+   Fy_rl = (1.95 +0.0001*(675 - Fz_rl))*Fz_rl;
+   Fy_rr = (1.95 +0.0001*(675 - Fz_rr))*Fz_rr;
    
-   v(i+1) = sqrt((r(j,k)*(Fy_fl(i) + Fy_fr(i) + Fy_rl(i) + Fy_rr(i)))/m);
+   v(i+1) = sqrt((r(j,k)*(Fy_fl + Fy_fr + Fy_rl + Fy_rr))/m); % calculating velocity
+   %tyre forces = centripetal acc
    
-   
-   if i == 10
+   if i == iter
        V(j,k) = v(end); %place converged velcoity in an array
        v = zeros(1,iter); %reset velocity vector for next iteration
        v(1) = 10; %initial velocity of 10 m/s
@@ -68,10 +68,11 @@ V = zeros(length(twf),length(twr));
       
         end
     end
-end
+ end
+ 
 skidpad_time = skidpad_distance./V;
 
-contourf(twf,twf,skidpad_time)
+contourf(twf,twr,skidpad_time)
 colorbar
 xlabel('front track width')
 ylabel('read track width')
