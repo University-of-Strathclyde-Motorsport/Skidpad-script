@@ -12,12 +12,13 @@ m = 294;
 g = 9.81;
 rho = 1.225;
 s = 1.1;
+
 %cdh = range of cg heights (added in later)
 twf = 1:0.01:1.5;
 twr = 1:0.01:1.5;
 r = zeros(length(twf),length(twr)); %corner radius array
 V = zeros(length(twf),length(twr)); %final velocity array
-
+skidpad_distance = zeros(length(twf),length(twr)); % array for storing lengths
 
 
  for j = 1:length(twf)
@@ -38,7 +39,7 @@ V = zeros(length(twf),length(twr)); %final velocity array
     ay = v(i)^2/(r(j,k)*g);
 
     %perpendicular distance funtion goes here when varying cg height comes
-
+   %calculating load transfers
    load_transfer_front = (Ws*ay/twf(j))*(hs*((Kphif + Ws*hs*(1-weightdist))/(Kphif+Kphir-Ws*hs)) + (1-weightdist)*Zrcf) + (Wuf*UScg*ay)/twf(j);
    load_transfer_rear  = (Ws*ay/twr(k))*(hs*((Kphir + Ws*hs*weightdist)/(Kphif+Kphir-Ws*hs)) + weightdist*Zrcr) + (Wur*UScg*ay)/twr(k);
 
@@ -47,10 +48,10 @@ V = zeros(length(twf),length(twr)); %final velocity array
 
    df = 0.5*rho*s*cl*v(i)^2; %calculate down force
 
-   Fz_fl = Fz_fstatic + load_transfer_front + df(i)/4; %loads (ask for aero balance)
-   Fz_fr = Fz_fstatic - load_transfer_front + df(i)/4;
-   Fz_rl = Fz_rstatic + load_transfer_rear + df(i)/4;
-   Fz_rr = Fz_rstatic - load_transfer_rear + df(i)/4;
+   Fz_fl = Fz_fstatic + load_transfer_front + df/4; %loads (ask for aero balance)
+   Fz_fr = Fz_fstatic - load_transfer_front + df/4;
+   Fz_rl = Fz_rstatic + load_transfer_rear + df/4;
+   Fz_rr = Fz_rstatic - load_transfer_rear + df/4;
 
    Fy_fl = (1.95 +0.0001*(675 - Fz_fl))*Fz_fl; %calculting tyre forces
    Fy_fr = (1.95 +0.0001*(675 - Fz_fr))*Fz_fr;
@@ -72,8 +73,8 @@ V = zeros(length(twf),length(twr)); %final velocity array
  
 skidpad_time = skidpad_distance./V;
 
-contourf(twf,twr,skidpad_time)
+surf(twr,twf,skidpad_time)
 colorbar
-xlabel('front track width')
-ylabel('read track width')
+xlabel('rear track width')
+ylabel('front track width')
 title('skidpad time')
