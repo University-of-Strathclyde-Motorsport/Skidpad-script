@@ -15,8 +15,8 @@ s = 1.1;
 
 %cdh = range of cg heights (added in later)
 tw = 1:0.001:1.5;
-corner_radius = 3:0.02:50;
-corner_radius = corner_radius(1:length(tw)); %janky fuckery to be able to plot need changed
+corner_radius = 3:0.01:30;
+corner_radius = corner_radius(1:length(tw)); %janky fuckery to be able to plot, need changed
 r = zeros(length(tw),length(corner_radius));
 distance = zeros(length(tw),length(corner_radius)); % array for storing lengths
 
