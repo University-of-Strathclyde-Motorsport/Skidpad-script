@@ -7,7 +7,9 @@ v = zeros(1,iter); %velocity vector
 v(1) = 10; %first guess of 10 m/s
 
 %BASE Cl
-cl = 3.5;
+BaseCl = 3.5;
+FWScalingFactor = 1;
+RWScalingFactor = 1;
 hs = 0.27033;
 m = 294;
 g = 9.81;
@@ -26,6 +28,7 @@ skidpad_distance = zeros(length(twf),length(twr)); % array for storing lengths
 
 for j = 1:length(twf)
 	for k = 1:length(twr)
+		cl = BaseCl + (twf(j)-1.2)*FWScalingFactor + (twr(k)-1.18)*RWScalingFactor;
 		for i = 1:length(v)
 
 
@@ -62,7 +65,7 @@ for j = 1:length(twf)
 			Fy_rr = (1.95 +0.0001*(675 - Fz_rr))*Fz_rr;
 
 			v(i+1) = sqrt((r(j,k)*(Fy_fl + Fy_fr + Fy_rl + Fy_rr))/m); % calculating velocity
-			disp(v(i+1));
+			
 			%tyre forces = centripetal acc
 
 			if i == iter
