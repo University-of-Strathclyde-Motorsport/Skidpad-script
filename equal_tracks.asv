@@ -19,8 +19,8 @@ twmm = tw.*1000;
 ntw = size(tw,2);
 minr = 3;
 maxr = 50;
-corner_radius = minr:(maxr-minr)/ntw:maxr;
-%corner_radius = corner_radius(1:length(tw)); %janky fuckery to be able to plot, need changed
+corner_radius = minr:(maxr-minr)/ntw:max
+corner_radius = corner_radius(1:length(tw)); %janky fuckery to be able to plot, need changed
 r = zeros(length(tw),length(corner_radius));
 distance = zeros(length(tw),length(corner_radius)); % array for storing lengths
 

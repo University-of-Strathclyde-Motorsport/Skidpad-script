@@ -14,8 +14,10 @@ rho = 1.225;
 s = 1.1;
 
 %cdh = range of cg heights (added in later)
-twf = 1:0.01:1.5;
-twr = 1:0.01:1.5;
+twf = 1:0.01:2;
+twr = 1:0.01:2;
+twfmm = twf.*1000;
+twrmm = twr.*1000;
 r = zeros(length(twf),length(twr)); %corner radius array
 V = zeros(length(twf),length(twr)); %final velocity array
 skidpad_distance = zeros(length(twf),length(twr)); % array for storing lengths
@@ -73,8 +75,10 @@ skidpad_distance = zeros(length(twf),length(twr)); % array for storing lengths
  
 skidpad_time = skidpad_distance./V;
 
-surf(twr,twf,skidpad_time)
+hold on
+
+contourf(twrmm,twfmm,skidpad_time)
 colorbar
-xlabel('rear track width')
-ylabel('front track width')
-title('skidpad time')
+xlabel('Rear Track Width (m)')
+ylabel('Front Track Width (m)')
+title('Skidpad Time (s)')
