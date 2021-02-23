@@ -31,7 +31,7 @@ distance = zeros(length(tw),length(corner_radius)); % array for storing lengths
     
 
 %calculating radius that the car will follow around the skidpad%
-  r(j,k) = corner_radius(k) + tw(j)/2;
+  r(j,k) = corner_radius(k);
 
     skidpad_distance(j,k) = 2*pi*r(j,k); %distance of the skidpad
     ay = v(i)^2/(r(j,k)*g);
